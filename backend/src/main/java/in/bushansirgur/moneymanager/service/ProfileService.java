@@ -31,15 +31,24 @@ public class ProfileService {
     @Value("${app.activation.url}")
     private String activationURL;
 
+    @Value("${BREVO_USERNAME:}")
+    private String brevoUsername;
+
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfile = toEntity(profileDTO);
         newProfile.setActivationToken(UUID.randomUUID().toString());
-        newProfile = profileRepository.save(newProfile);
-        //send activation email
-        String activationLink = activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
-        String subject = "Activate your Money Manager account";
-        String body = "Click on the following link to activate your account: " + activationLink;
-        emailService.sendEmail(newProfile.getEmail(), subject, body);
+
+        // If email service is configured, send activation email; otherwise auto-activate
+        if (brevoUsername != null && !brevoUsername.isBlank()) {
+            newProfile = profileRepository.save(newProfile);
+            String activationLink = activationURL + "/api/v1.0/activate?token=" + newProfile.getActivationToken();
+            String subject = "Activate your Money Manager account";
+            String body = "Click on the following link to activate your account: " + activationLink;
+            emailService.sendEmail(newProfile.getEmail(), subject, body);
+        } else {
+            newProfile.setIsActive(true);
+            newProfile = profileRepository.save(newProfile);
+        }
         return toDTO(newProfile);
     }
 
