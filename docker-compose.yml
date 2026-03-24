@@ -5,7 +5,7 @@ services:
     image: mysql:8.0
     container_name: moneymanager-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: scbushan05
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: moneymanager
     ports:
       - "3306:3306"
