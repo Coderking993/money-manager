@@ -17,3 +17,8 @@ dist-ssr/
 backend/target/
 frontend/node_modules/
 frontend/dist/
+
+# Environment variable files (contain secrets - never commit!)
+.env
+*.env.local
+*.env.production

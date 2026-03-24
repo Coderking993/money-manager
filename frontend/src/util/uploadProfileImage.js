@@ -1,6 +1,6 @@
 import {API_ENDPOINTS} from "./apiEndpoints.js";
 
-const CLOUDINARY_UPLOAD_PRESET = "moneymanager";
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "moneymanager";
 
 const uploadProfileImage = async (image) => {
     const formData = new FormData();
